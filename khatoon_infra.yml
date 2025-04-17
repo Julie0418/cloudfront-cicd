@@ -6,12 +6,7 @@ Parameters:
   ECRRepositoryName:
     Description: Name of the existing ECR repository
     Type: String
-    Default: devops-ecr
-
-  ImageTag:
-    Description: Tag of the Docker image in ECR (e.g., Git commit hash)
-    Type: String
-    Default: latest # Default to 'latest' if no tag is provided
+    Default: cloudfront-cicd
 
   GitHubOwner:
     Description: "GitHub repository owner"
@@ -21,7 +16,7 @@ Parameters:
   GitHubRepo:
     Description: "GitHub repository name"
     Type: String
-    Default: cosc-1209-Assignmnet4
+    Default: cloudfront-cicd
 
   GitHubBranch:
     Description: "Branch for CodePipeline"

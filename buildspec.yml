@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     AWS_DEFAULT_REGION: "ca-central-1" # Update to your region
-    IMAGE_REPO_NAME: "devops-ecr"  # Ensure this matches the ECR repository name
+    IMAGE_REPO_NAME: "cloudfront-cicd"  # Ensure this matches the ECR repository name
     AWS_ACCOUNT_ID: "557690603426"    # Update to your AWS account ID
 
 phases:
