@@ -37,14 +37,14 @@ Resources:
       EnableDnsSupport: true
       Tags:
         - Key: Name
-          Value: khatoon-VPC
+          Value: julekha-VPC
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: khatoon-IGW
+          Value: julekha-IGW
 
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -60,7 +60,7 @@ Resources:
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - Key: Name
-          Value: khatoon-PublicSubnet1
+          Value: julekha-PublicSubnet1
 
   PublicSubnet2:
     Type: AWS::EC2::Subnet
@@ -70,7 +70,7 @@ Resources:
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - Key: Name
-          Value: khatoon-PublicSubnet2
+          Value: julekha-PublicSubnet2
 
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
@@ -80,7 +80,7 @@ Resources:
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - Key: Name
-          Value: khatoon-PrivateSubnet1
+          Value: julekha-PrivateSubnet1
 
   PrivateSubnet2:
     Type: AWS::EC2::Subnet
@@ -90,7 +90,7 @@ Resources:
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - Key: Name
-          Value: khatoon-PrivateSubnet2
+          Value: julekha-PrivateSubnet2
 
   # Public Route Table for Public Subnets
   PublicRouteTable:
@@ -99,7 +99,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: khatoon-PublicRouteTable
+          Value: julekha-PublicRouteTable
 
   PublicRoute:
     Type: AWS::EC2::Route
@@ -134,7 +134,7 @@ Resources:
       SubnetId: !Ref PublicSubnet1
       Tags:
         - Key: Name
-          Value: khatoon-NATGateway
+          Value: julekha-NATGateway
 
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
@@ -142,7 +142,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: khatoon-PrivateRouteTable
+          Value: julekha-PrivateRouteTable
 
   PrivateRoute:
     Type: AWS::EC2::Route
@@ -167,18 +167,18 @@ Resources:
   CodePipelineArtifactBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub khatoon-codepipeline-artifacts-${AWS::AccountId}-${AWS::Region}
+      BucketName: !Sub julekha-codepipeline-artifacts-${AWS::AccountId}-${AWS::Region}
       VersioningConfiguration:
         Status: Enabled
       Tags:
         - Key: Name
-          Value: khatoon-CodePipelineArtifacts
+          Value: julekha-CodePipelineArtifacts
 
   # Application Load Balancer
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: khatoon-ALB Security Group
+      GroupDescription: julekha-ALB Security Group
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -196,7 +196,7 @@ Resources:
         - !Ref ALBSecurityGroup
       Tags:
         - Key: Name
-          Value: khatoon-ALB
+          Value: julekha-ALB
 
   ALBTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -222,12 +222,12 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: khatoon-ECSCluster
+      ClusterName: julekha-ECSCluster
 
   ECSSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: khatoon-ECS Security Group
+      GroupDescription: julekha-ECS Security Group
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -252,7 +252,7 @@ Resources:
   ECSTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: khatoon-task
+      Family: julekha-task
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
@@ -260,7 +260,7 @@ Resources:
       Memory: '512'
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
-        - Name: khatoon-app
+        - Name: julekha-app
           Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepositoryName}:latest
           PortMappings:
             - ContainerPort: 3000
@@ -272,7 +272,7 @@ Resources:
     DependsOn: ALBListener
     Properties:
       Cluster: !Ref ECSCluster
-      ServiceName: khatoon-ECSService
+      ServiceName: julekha-ECSService
       TaskDefinition: !Ref ECSTaskDefinition
       DesiredCount: 2
       LaunchType: FARGATE
@@ -285,7 +285,7 @@ Resources:
             - !Ref ECSSecurityGroup
       LoadBalancers:
         - TargetGroupArn: !Ref ALBTargetGroup
-          ContainerName: khatoon-app
+          ContainerName: julekha-app
           ContainerPort: 3000
 
 # Auto Scaling for ECS Service
@@ -303,7 +303,7 @@ Resources:
   ECSAutoScalingPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: khatoon-ECSAutoScalingPolicy
+      PolicyName: julekha-ECSAutoScalingPolicy
       PolicyType: TargetTrackingScaling
       ScalingTargetId: !Ref ECSAutoScalingTarget
       TargetTrackingScalingPolicyConfiguration:
@@ -369,7 +369,7 @@ Resources:
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: khatoon-CodeBuild
+      Name: julekha-CodeBuild
       ServiceRole: !GetAtt CodeBuildRole.Arn
       Artifacts:
         Type: CODEPIPELINE
