@@ -492,3 +492,6 @@ Outputs:
   ECSServiceName:
     Description: Name of the ECS Service
     Value: !Ref ECSService
+  CodePipelineName:
+    Description: Name of the CodePipeline
+    Value: !Ref CodePipeline
