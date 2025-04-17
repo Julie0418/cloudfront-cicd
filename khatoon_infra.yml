@@ -295,7 +295,7 @@ Resources:
     Properties:
       MaxCapacity: 4 # Maximum number of tasks
       MinCapacity: 2 # Minimum number of tasks
-      ResourceId: !Sub service/${ECSCluster}/${ECSService}
+      ResourceId: !Sub service/${ECSCluster}/${ECSService.Name}
       RoleARN: !GetAtt ECSAutoScalingRole.Arn
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
